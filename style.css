@@ -1,0 +1,150 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;400&display=swap');
+
+
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+
+body {
+    background: rgb(2, 0, 36);
+    background: radial-gradient(circle, rgba(2, 0, 36, 1) 0%, rgba(19, 14, 115, 1) 0%, rgba(17, 5, 66, 1) 82%, rgba(4, 5, 49, 1) 100%);
+    color: #ffff;
+    font-family: 'Poppins', sans-serif;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    overflow: hidden;
+    margin: 0;
+}
+
+header {
+    text-align: center;
+    padding: 20px;
+    font-size: 25px;
+}
+
+#search {
+    display: block;
+    height: 42px;
+    width: 500px;
+    margin: 0 auto;
+    padding: 15px;
+    color: #ffff;
+    font-family: inherit;
+    font-size: 17px;
+    border: none;
+    border-radius: 10px;
+    /* box-shadow: 0 5px 10px rgba(154, 160, 185, 0.05), 0 15px 40px rgba(0, 0, 0, 0.1); */
+    box-shadow: inset -3px -4px 15px 3px rgb(8 16 47), inset -8px -4px 18px rgb(11 90 124);
+    ;
+    background: rgb(2, 0, 36);
+    background: linear-gradient(90deg, rgba(2, 0, 36, 1) 0%, rgb(44, 15, 105) 56%, rgb(14, 86, 101) 100%);
+}
+
+#form input::placeholder {
+    color: #bbb;
+}
+
+#form [type="text"]:focus {
+    outline: none;
+}
+
+#main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 700px;
+}
+
+/*=============== Card Design ==============*/
+.card {
+    max-width: 800px;
+    background: rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(5px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    border-radius: 20px;
+    display: flex;
+    padding: 3rem;
+    margin: 1rem 1.5rem;
+}
+
+.avatar {
+    border-radius: 50%;
+    border: 7px solid #112552;
+    height: 160px;
+    width: 160px;
+    transition: all 0.3s;
+    cursor: pointer;
+}
+
+.avatar:hover {
+    transform: scale(1.2);
+}
+
+.user-info {
+    color: #eee;
+    margin-left: 2rem;
+}
+
+.user-info h2 {
+    margin-top: 0;
+}
+
+.info {
+    list-style-type: none;
+    display: flex;
+    justify-content: space-between;
+    padding: 0;
+    max-width: 400px;
+}
+
+.user-info ul li {
+    display: flex;
+    align-items: center;
+}
+
+.user-info ul li strong {
+    font-size: 0.8rem;
+    margin-left: 0.5rem;
+}
+
+.repo {
+    background-color: #2a2a72;
+    border-radius: 5px;
+    display: inline-block;
+    color: white;
+    font-size: 0.7rem;
+    padding: 0.25rem 0.5rem;
+    margin-right: 0.5rem;
+    margin-bottom: 0.5rem;
+    text-decoration: none;
+    transition: all 0.3s;
+}
+
+.repo:hover {
+    transform: scale(1.2);
+}
+
+/*============= Skeleton design ==========*/
+
+.skeleton {
+    opacity: 0.7;
+    animation: skeleton-loading 1s linear infinite alternate;
+}
+
+@keyframes skeleton-loading {
+    0% {
+        background-color: hsl(200, 20%, 70%);
+    }
+
+    100% {
+        background-color: hsl(200, 20%, 95%);
+    }
+}
