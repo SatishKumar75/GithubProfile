@@ -1,6 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;400&display=swap');
-
-
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@200;400&display=swap");
 
 * {
     box-sizing: border-box;
@@ -8,12 +6,15 @@
     padding: 0;
 }
 
-
 body {
     background: rgb(2, 0, 36);
-    background: radial-gradient(circle, rgba(2, 0, 36, 1) 0%, rgba(19, 14, 115, 1) 0%, rgba(17, 5, 66, 1) 82%, rgba(4, 5, 49, 1) 100%);
+    background: radial-gradient(circle,
+            rgba(2, 0, 36, 1) 0%,
+            rgba(19, 14, 115, 1) 0%,
+            rgba(17, 5, 66, 1) 82%,
+            rgba(4, 5, 49, 1) 100%);
     color: #ffff;
-    font-family: 'Poppins', sans-serif;
+    font-family: "Poppins", sans-serif;
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -39,12 +40,53 @@ header {
     font-family: inherit;
     font-size: 17px;
     border: none;
-    border-radius: 10px;
+    border-radius: 10px 1px 1px 10px;
     /* box-shadow: 0 5px 10px rgba(154, 160, 185, 0.05), 0 15px 40px rgba(0, 0, 0, 0.1); */
-    box-shadow: inset -3px -4px 15px 3px rgb(8 16 47), inset -8px -4px 18px rgb(11 90 124);
-    ;
+    /* box-shadow: inset -3px -4px 15px 3px rgb(8 16 47),
+        inset -8px -4px 18px rgb(11 90 124);
     background: rgb(2, 0, 36);
-    background: linear-gradient(90deg, rgba(2, 0, 36, 1) 0%, rgb(44, 15, 105) 56%, rgb(14, 86, 101) 100%);
+    background: linear-gradient(90deg,
+            rgba(2, 0, 36, 1) 0%,
+            rgb(44, 15, 105) 56%,
+            rgb(14, 86, 101) 100%); */
+    background: transparent;
+}
+
+#form {
+    height: 42px;
+    width: 510px;
+    /* max-width: 700px; */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: inset -3px -4px 15px 3px rgb(8 16 47),
+        inset -8px -4px 18px rgb(11 90 124);
+    background: rgb(2, 0, 36);
+    background: linear-gradient(90deg,
+            rgba(2, 0, 36, 1) 0%,
+            rgb(44, 15, 105) 56%,
+            rgb(14, 86, 101) 100%);
+    border-radius: 10px;
+
+}
+
+#form button img {
+    width: 24px;
+    filter: invert(65%);
+}
+
+#form button {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 0;
+    border-radius: 0 10px 10px 0;
+    width: 35px;
+    height: 42px;
+    background: transparent;
+    cursor: pointer;
+    box-shadow: inset -3px -4px 15px 3px rgb(8 16 47),
+        inset -8px -4px 18px rgb(11 90 124);
 }
 
 #form input::placeholder {
@@ -64,10 +106,10 @@ header {
 
 /*=============== Card Design ==============*/
 .card {
-    max-width: 800px;
-    background: rgba(255, 255, 255, 0.2);
-    backdrop-filter: blur(5px);
-    border: 1px solid rgba(255, 255, 255, 0.3);
+    max-width: 620px;
+    background: rgba(255, 255, 255, 0.089);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.473);
     box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
     border-radius: 20px;
     display: flex;
@@ -132,19 +174,137 @@ header {
     transform: scale(1.2);
 }
 
-/*============= Skeleton design ==========*/
 
-.skeleton {
-    opacity: 0.7;
-    animation: skeleton-loading 1s linear infinite alternate;
+.box {
+    padding: 3rem;
+    margin: 1rem 1.5rem;
+    min-width: 600px;
+    height: 231px;
+    /* width: 100%; */
+    padding: 15px;
+    /* background-color: red; */
+    background: rgba(21, 26, 42, 1);
+
+    border-radius: 10px;
+    box-sizing: border-box;
 }
 
-@keyframes skeleton-loading {
+.skeleton {
+    background: rgba(21, 26, 42, 1);
+
+    border-radius: 50%;
+}
+
+.skeleton .square {
+    height: 80px;
+    border-radius: 5px;
+    width: 80px;
+    background: rgba(130, 130, 130, 0.2);
+    background: -webkit-gradient(linear,
+            left top,
+            right top,
+            color-stop(8%, rgba(130, 130, 130, 0.2)),
+            color-stop(18%, rgba(130, 130, 130, 0.3)),
+            color-stop(33%, rgba(130, 130, 130, 0.2)));
+    background: linear-gradient(to right,
+            rgba(130, 130, 130, 0.2) 8%,
+            rgba(130, 130, 130, 0.3) 18%,
+            rgba(130, 130, 130, 0.2) 33%);
+    background-size: 800px 100px;
+    animation: wave-squares 2s infinite ease-out;
+}
+
+.line {
+    height: 12px;
+    margin-bottom: 6px;
+    border-radius: 2px;
+    background: rgba(130, 130, 130, 0.2);
+    background: -webkit-gradient(linear,
+            left top,
+            right top,
+            color-stop(8%, rgba(130, 130, 130, 0.2)),
+            color-stop(18%, rgba(130, 130, 130, 0.3)),
+            color-stop(33%, rgba(130, 130, 130, 0.2)));
+    background: linear-gradient(to right,
+            rgba(130, 130, 130, 0.2) 8%,
+            rgba(130, 130, 130, 0.3) 18%,
+            rgba(130, 130, 130, 0.2) 33%);
+    background-size: 800px 100px;
+    animation: wave-lines 2s infinite ease-out;
+}
+
+.skeleton-right {
+    margin-bottom: 10px;
+    display: flex;
+    gap: 30px;
+}
+
+.line-square {
+    width: 200px;
+    margin-top: 20px;
+}
+
+@keyframes wave-lines {
     0% {
-        background-color: hsl(200, 20%, 70%);
+        background-position: -468px 0;
     }
 
     100% {
-        background-color: hsl(200, 20%, 95%);
+        background-position: 468px 0;
+    }
+}
+
+@keyframes wave-squares {
+    0% {
+        background-position: -468px 0;
+    }
+
+    100% {
+        background-position: 468px 0;
+    }
+}
+
+
+
+/* Media Queries for Mobile */
+@media (max-width: 600px) {
+    #search {
+        width: 100%;
+        font-size: 5vw;
+    }
+
+    #form {
+        width: 90%;
+    }
+
+    .card {
+        width: 40vh;
+        display: flex;
+        flex-direction: column;
+
+    }
+
+    .avatar {
+        height: 130px;
+        width: 130px;
+        margin: 0 auto;
+    }
+
+    .user-info {
+        margin-left: 0;
+        text-align: center;
+        margin-top: 1rem;
+    }
+
+    .user-info h2 {
+        margin-bottom: 0.5rem;
+    }
+
+    .info {
+        margin-top: 1rem;
+    }
+
+    .user-info ul li {
+        margin: 0.5rem;
     }
 }
