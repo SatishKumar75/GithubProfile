@@ -133,6 +133,7 @@ header {
 .user-info {
     color: #eee;
     margin-left: 2rem;
+    text-align: center;
 }
 
 .user-info h2 {
