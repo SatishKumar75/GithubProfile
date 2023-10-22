@@ -8,11 +8,12 @@
 
 body {
     background: rgb(2, 0, 36);
-    background: radial-gradient(circle,
+    /* background: radial-gradient(circle,
             rgba(2, 0, 36, 1) 0%,
             rgba(19, 14, 115, 1) 0%,
             rgba(17, 5, 66, 1) 82%,
-            rgba(4, 5, 49, 1) 100%);
+            rgba(4, 5, 49, 1) 100%); */
+    background: linear-gradient(0deg, rgba(13, 35, 93, 1) 0%, rgba(0, 5, 8, 1) 70%);
     color: #ffff;
     font-family: "Poppins", sans-serif;
     display: flex;
@@ -21,7 +22,14 @@ body {
     align-items: center;
     min-height: 100vh;
     overflow: hidden;
-    /* margin: 0 auto; */
+}
+
+#canvas {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
 }
 
 header {
@@ -41,21 +49,13 @@ header {
     font-size: 17px;
     border: none;
     border-radius: 10px 1px 1px 10px;
-    /* box-shadow: 0 5px 10px rgba(154, 160, 185, 0.05), 0 15px 40px rgba(0, 0, 0, 0.1); */
-    /* box-shadow: inset -3px -4px 15px 3px rgb(8 16 47),
-        inset -8px -4px 18px rgb(11 90 124);
-    background: rgb(2, 0, 36);
-    background: linear-gradient(90deg,
-            rgba(2, 0, 36, 1) 0%,
-            rgb(44, 15, 105) 56%,
-            rgb(14, 86, 101) 100%); */
     background: transparent;
+    z-index: 100;
 }
 
 #form {
     height: 42px;
     width: 510px;
-    /* max-width: 700px; */
     display: flex;
     justify-content: center;
     align-items: center;
@@ -67,7 +67,7 @@ header {
             rgb(44, 15, 105) 56%,
             rgb(14, 86, 101) 100%);
     border-radius: 10px;
-
+    z-index: 100;
 }
 
 #form button img {
