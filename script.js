@@ -79,7 +79,7 @@ const getUser = async (username) => {
         </div>
     </div>
       `;
-    
+
     main.innerHTML = card;
     getRepos(username);
   } catch (error) {
@@ -188,10 +188,10 @@ function init() {
   ctx = canvas.getContext("2d");
   resizeReset();
   moon = new Moon();
-  for (let a = 0; a < w * h * 0.0001; a++) {
+  for (let a = 0; a < w * h * 0.0003; a++) {
     stars.push(new Star());
   }
-  for (let b = 0; b < 2; b++) {
+  for (let b = 0; b < 5; b++) {
     meteors.push(new Meteor());
   }
   animationLoop();
@@ -271,7 +271,7 @@ class Meteor {
   reset() {
     this.x = Math.random() * w + 300;
     this.y = -100;
-    this.size = Math.random() * 2 + 0.5;
+    this.size = Math.random() * 3 + 0.5;
     this.speed = (Math.random() + 0.5) * 8;
   }
   draw() {
