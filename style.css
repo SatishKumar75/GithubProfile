@@ -337,6 +337,8 @@ header {
 }
 
 .follow-card {
+    width: 340px;
+    /* height: 320px; */
     display: flex;
     flex-direction: column;
     align-items: center;
