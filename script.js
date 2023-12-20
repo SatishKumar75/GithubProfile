@@ -2,6 +2,7 @@ const APIURL = "https://api.github.com/users/";
 const main = document.querySelector("#main");
 const searchBox = document.querySelector("#search");
 const URL = "https://github.com/";
+let followersClickHandler = null;
 
 const skeleton = `
 <div class="box">
@@ -26,39 +27,59 @@ const skeleton = `
      </div>
      `;
 const getUser = async (username) => {
+  if (document.getElementById("follow")) {
+    document.getElementById("follow").innerHTML = "";
+  }
   try {
     main.innerHTML = skeleton;
 
     const response = await fetch(APIURL + username);
     const data = await response.json();
-    console.log(data);
+    // console.log(data);
     if (data.message == "Not Found") {
       throw new Error("User not found");
     }
+    if (followersClickHandler) {
+      document.removeEventListener("click", followersClickHandler);
+    }
+
+    // Add a new click event listener
+    followersClickHandler = (event) => {
+      if (event.target.id === "followers") {
+        getFollowersDetails(data.followers_url);
+        console.log(data.followers_url);
+      }
+    };
+
+    document.addEventListener("click", followersClickHandler);
 
     const card = `
+    
     <div class="card">
-    <a href="${URL + username}" target="_blank">
-          <img class="avatar skeleton" src="${
-            data.avatar_url
-          }" alt="Florin pop">
+        <a href="${URL + username}" target="_blank">
+            <img class="avatar skeleton" src="${
+              data.avatar_url
+            }" alt="Florin pop">
         </a>
-    <div class="user-info">
-    <h2>${data.name}</h2>
-    <p>${data.bio ? data.bio : ""}</p>
-  
-  <ul class="info">
-          <li>${data.followers}<strong>Followers</strong> </li>
-          <li>${data.following}<strong>Following</strong> </li>
-          <li>${data.public_repos} <strong>Repos</strong> </li>
-          </ul>
-      
-          <div id="repo">
-          
-          </div>
-      </div>
-      </div>
+        <div class="user-info">
+            <h2>${data.name}</h2>
+            <p>${data.bio ? data.bio : ""}</p>
+
+            <ul class="info">
+                <li >${
+                  data.followers
+                }<strong id="followers" >Followers</strong> </li>
+                <li>${data.following}<strong>Following</strong> </li>
+                <li>${data.public_repos} <strong>Repos</strong> </li>
+            </ul>
+
+            <div id="repo">
+
+            </div>
+        </div>
+    </div>
       `;
+    
     main.innerHTML = card;
     getRepos(username);
   } catch (error) {
@@ -72,7 +93,7 @@ const getRepos = async (username) => {
   try {
     const response = await fetch(APIURL + username + "/repos");
     const data = await response.json();
-    data.length > 10 ? data.splice(10) : null;
+    data.length > 10 ? data.splice(15) : null;
     data.forEach((item) => {
       const elem = document.createElement("a");
       elem.classList.add("repo");
@@ -95,6 +116,62 @@ const formSubmit = () => {
 searchBox.addEventListener("focusout", function () {
   formSubmit();
 });
+
+// Get Followers details
+
+const getFollowersDetails = async (followersUrl) => {
+  const followContainer = document.getElementById("follow");
+  followContainer.innerHTML = "";
+
+  try {
+    const response = await fetch(followersUrl);
+    if (!response.ok) {
+      throw new Error(`Failed to fetch followers. Status: ${response.status}`);
+    }
+
+    const followersData = await response.json();
+
+    for (let i = 0; i < Math.min(2, followersData.length); i++) {
+      const follower = followersData[i];
+
+      try {
+        const followerDetailsResponse = await fetch(follower.url);
+        if (!followerDetailsResponse.ok) {
+          throw new Error(
+            `Failed to fetch follower details. Status: ${followerDetailsResponse.status}`
+          );
+        }
+
+        const followerDetails = await followerDetailsResponse.json();
+        console.log(followerDetails);
+
+        const card = `
+          <div class="follow-card">
+            <a href="${followerDetails.html_url}" target="_blank">
+              <img class="avatar" src="${followerDetails.avatar_url}" alt="${
+          followerDetails.login
+        }">
+            </a>
+            <div class="follower-info">
+              <h2>${followerDetails.name}</h2>
+              <p>${followerDetails.bio || ""}</p>
+              <ul class="info">
+                <li>${followerDetails.followers} <strong>Followers</strong></li>
+                <li>${followerDetails.following} <strong>Following</strong></li>
+                <li>${followerDetails.public_repos} <strong>Repos</strong></li>
+              </ul>
+            </div>
+          </div>
+        `;
+        followContainer.innerHTML += card;
+      } catch (detailsError) {
+        console.error("Error fetching follower details:", detailsError);
+      }
+    }
+  } catch (error) {
+    console.error("Error fetching followers:", error);
+  }
+};
 
 // Background Animation
 
@@ -144,11 +221,6 @@ function drawScene() {
 }
 
 class Moon {
-  // constructor() {
-  // 	this.x = 150;
-  // 	this.y = 150;
-  // 	this.size = 100;
-  // }
   draw() {
     ctx.save();
     ctx.beginPath();
@@ -200,7 +272,7 @@ class Meteor {
     this.x = Math.random() * w + 300;
     this.y = -100;
     this.size = Math.random() * 2 + 0.5;
-    this.speed = (Math.random() + 0.5) * 15;
+    this.speed = (Math.random() + 0.5) * 8;
   }
   draw() {
     ctx.save();
@@ -229,3 +301,5 @@ class Meteor {
 
 window.addEventListener("DOMContentLoaded", init);
 window.addEventListener("resize", resizeReset);
+
+// Follower details

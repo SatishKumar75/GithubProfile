@@ -21,7 +21,7 @@ body {
     justify-content: center;
     align-items: center;
     min-height: 100vh;
-    overflow: hidden;
+    /* overflow: hidden; */
 }
 
 #canvas {
@@ -152,11 +152,13 @@ header {
 .user-info ul li {
     display: flex;
     align-items: center;
+    justify-content: space-between;
 }
 
 .user-info ul li strong {
     font-size: 0.8rem;
     margin-left: 0.5rem;
+    cursor: pointer;
 }
 
 .repo {
@@ -307,7 +309,7 @@ header {
     .avatar {
         height: 130px;
         width: 130px;
-        margin: 0 auto;
+        margin: 0 65px;
     }
 
     .user-info {
@@ -326,5 +328,58 @@ header {
 
     .user-info ul li {
         margin: 0.5rem;
+    }
+}
+
+#follow {
+    display: flex;
+    gap: 1rem;
+}
+
+.follow-card {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: rgba(255, 255, 255, 0.089);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255, 255, 255, 0.473);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+    border-radius: 20px;
+    display: flex;
+    padding: 2rem 1rem;
+}
+
+.follower-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.follower-info .info {
+    display: flex;
+    gap: 10px;
+}
+
+.follower-info .info li {
+    display: flex;
+    gap: .5rem;
+}
+
+/* Media Queries for Mobile */
+@media (max-width: 600px) {
+    body {
+        width: 100%;
+        overflow-x: hidden;
+        overflow-y: scroll;
+
+    }
+
+    #follow {
+        display: block;
+    }
+
+    .follow-card {
+        margin-bottom: 1rem;
     }
 }
