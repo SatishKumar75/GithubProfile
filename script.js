@@ -88,21 +88,25 @@ const getUser = async (username) => {
 };
 
 const getRepos = async (username) => {
-  const repos = document.querySelector("#repo");
-
   try {
+    const reposContainer = document.querySelector("#repo");
     const response = await fetch(APIURL + username + "/repos");
     const data = await response.json();
-    data.length > 10 ? data.splice(15) : null;
-    data.forEach((item) => {
-      const elem = document.createElement("a");
-      elem.classList.add("repo");
-      elem.href = item.html_url;
-      elem.innerText = item.name;
-      elem.target = "_blank";
-      repos.appendChild(elem);
-    });
-  } catch (error) {}
+
+    const topRepos = data.sort(
+      (a, b) => new Date(b.pushed_at) - new Date(a.pushed_at)
+    );
+    const reposHTML = topRepos
+      .slice(0, 10)
+      .map(
+        (item) =>
+          `<a class="repo" href="${item.html_url}" target="_blank">${item.name}</a>`
+      )
+      .join("");
+    reposContainer.innerHTML = reposHTML;
+  } catch (error) {
+    console.error("Error fetching or processing data:", error);
+  }
 };
 
 const formSubmit = () => {
@@ -125,26 +129,37 @@ const getFollowersDetails = async (followersUrl) => {
 
   try {
     const response = await fetch(followersUrl);
+
     if (!response.ok) {
       throw new Error(`Failed to fetch followers. Status: ${response.status}`);
     }
 
     const followersData = await response.json();
 
-    for (let i = 0; i < Math.min(2, followersData.length); i++) {
-      const follower = followersData[i];
+    const followerDetailsPromises = followersData
+      .slice(0, 2)
+      .map(async (follower) => {
+        try {
+          const followerDetailsResponse = await fetch(follower.url);
 
-      try {
-        const followerDetailsResponse = await fetch(follower.url);
-        if (!followerDetailsResponse.ok) {
-          throw new Error(
-            `Failed to fetch follower details. Status: ${followerDetailsResponse.status}`
-          );
+          if (!followerDetailsResponse.ok) {
+            throw new Error(
+              `Failed to fetch follower details. Status: ${followerDetailsResponse.status}`
+            );
+          }
+
+          return await followerDetailsResponse.json();
+        } catch (detailsError) {
+          console.error("Error fetching follower details:", detailsError);
+          return null;
         }
+      });
 
-        const followerDetails = await followerDetailsResponse.json();
-        console.log(followerDetails);
+    const followerDetailsArray = await Promise.all(followerDetailsPromises);
 
+    followerDetailsArray
+      .filter((followerDetails) => followerDetails !== null)
+      .forEach((followerDetails) => {
         const card = `
           <div class="follow-card">
             <a href="${followerDetails.html_url}" target="_blank">
@@ -164,10 +179,7 @@ const getFollowersDetails = async (followersUrl) => {
           </div>
         `;
         followContainer.innerHTML += card;
-      } catch (detailsError) {
-        console.error("Error fetching follower details:", detailsError);
-      }
-    }
+      });
   } catch (error) {
     console.error("Error fetching followers:", error);
   }
