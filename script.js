@@ -186,63 +186,76 @@ const getFollowersDetails = async (followersUrl) => {
 };
 
 // Background Animation
-
 let canvas,
   ctx,
   w,
   h,
-  moon,
   stars = [],
-  meteors = [];
+  meteors = [],
+  particlesarray = [];
 
 function init() {
-  canvas = document.querySelector("#canvas");
+  canvas = document.getElementById("canvas");
   ctx = canvas.getContext("2d");
-  resizeReset();
-  moon = new Moon();
-  for (let a = 0; a < w * h * 0.0003; a++) {
-    stars.push(new Star());
-  }
-  for (let b = 0; b < 5; b++) {
-    meteors.push(new Meteor());
-  }
-  animationLoop();
+  resizeCanvas();
+  createStars();
+  createMeteors();
+  animate();
+  animateParticles();
+  window.addEventListener("resize", resizeCanvas);
+  canvas1.addEventListener("mousemove", addParticles);
 }
 
-function resizeReset() {
-  w = canvas.width = window.innerWidth;
-  h = canvas.height = window.innerHeight;
+function resizeCanvas() {
+  w = canvas.width = canvas1.width = window.innerWidth;
+  h = canvas.height = canvas1.height = window.innerHeight;
 }
 
-function animationLoop() {
+function createStars() {
+  stars = Array.from({ length: w * h * 0.0003 }, () => new Star());
+}
+
+function createMeteors() {
+  meteors = Array.from({ length: 5 }, () => new Meteor());
+}
+
+function animate() {
   ctx.clearRect(0, 0, w, h);
-  drawScene();
-  requestAnimationFrame(animationLoop);
-}
-
-function drawScene() {
-  moon.draw();
-  stars.map((star) => {
+  drawMeteors();
+  stars.forEach((star) => {
     star.update();
     star.draw();
   });
-  meteors.map((meteor) => {
+  requestAnimationFrame(animate);
+}
+
+function drawMeteors() {
+  meteors.forEach((meteor) => {
     meteor.update();
     meteor.draw();
   });
 }
 
-class Moon {
-  draw() {
-    ctx.save();
-    ctx.beginPath();
-    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
-    ctx.shadowColor = "rgba(254, 247, 144, .7)";
-    ctx.shadowBlur = 70;
-    ctx.fillStyle = "rgba(254, 247, 144, 1)";
-    ctx.fill();
-    ctx.closePath();
-    ctx.restore();
+// Particle animation
+function animateParticles() {
+  const canvas1 = document.getElementById("canvas1");
+  const ctx1 = canvas1.getContext("2d");
+  canvas1.width = window.innerWidth;
+  canvas1.height = window.innerHeight;
+  particlesarray.forEach((particle, index) => {
+    particle.update();
+    particle.draw();
+    if (particle.size <= 0.1) {
+      particlesarray.splice(index, 1);
+    }
+  });
+  requestAnimationFrame(animateParticles);
+}
+
+function addParticles(event) {
+  const mouse = { x: event.clientX, y: event.clientY };
+  for (let i = 0; i < 5; i++) {
+    particlesarray.push(new Particle(mouse.x, mouse.y));
   }
 }
 
@@ -311,7 +324,89 @@ class Meteor {
   }
 }
 
-window.addEventListener("DOMContentLoaded", init);
-window.addEventListener("resize", resizeReset);
+const canvas1 = document.getElementById("canvas1");
+const ctx1 = canvas1.getContext("2d");
 
-// Follower details
+class Particle {
+  constructor(x, y) {
+    this.x = x;
+    this.y = y;
+    this.size = Math.random() * 5 + 1;
+    this.speedx = Math.random() * 3 - 1.5;
+    this.speedy = Math.random() * 3 - 1.5;
+    this.color = "#ffffff"; // Initially set to white
+    this.targetColor = getRandomColor();
+    this.colorChangeRate = 0.05; // Adjust the speed of color change
+  }
+
+  update() {
+    this.x += this.speedx;
+    this.y += this.speedy;
+    if (this.size > 0) {
+      this.size -= 0.1;
+    }
+    this.updateColor();
+  }
+
+  draw() {
+    ctx1.fillStyle = this.color;
+    ctx1.beginPath();
+    ctx1.moveTo(this.x, this.y + this.size);
+    for (let i = 1; i <= 5; i++) {
+      ctx1.lineTo(
+        this.x + this.size * Math.cos((i * 4 * Math.PI) / 5),
+        this.y + this.size * Math.sin((i * 4 * Math.PI) / 5)
+      );
+      ctx1.lineTo(
+        this.x + (this.size / 2) * Math.cos(((i + 0.5) * 4 * Math.PI) / 5),
+        this.y + (this.size / 2) * Math.sin(((i + 0.5) * 4 * Math.PI) / 5)
+      );
+    }
+    ctx1.closePath();
+    ctx1.fill();
+  }
+
+  updateColor() {
+    const diffR = hexToRgb(this.targetColor).r - hexToRgb(this.color).r;
+    const diffG = hexToRgb(this.targetColor).g - hexToRgb(this.color).g;
+    const diffB = hexToRgb(this.targetColor).b - hexToRgb(this.color).b;
+
+    // Update each RGB component of the color
+    const newR = hexToRgb(this.color).r + diffR * this.colorChangeRate;
+    const newG = hexToRgb(this.color).g + diffG * this.colorChangeRate;
+    const newB = hexToRgb(this.color).b + diffB * this.colorChangeRate;
+
+    // Set the new color
+    this.color = rgbToHex(Math.floor(newR), Math.floor(newG), Math.floor(newB));
+
+    // If the color is very close to the target color, set a new target color
+    if (
+      Math.abs(hexToRgb(this.targetColor).r - hexToRgb(this.color).r) < 1 &&
+      Math.abs(hexToRgb(this.targetColor).g - hexToRgb(this.color).g) < 1 &&
+      Math.abs(hexToRgb(this.targetColor).b - hexToRgb(this.color).b) < 1
+    ) {
+      this.targetColor = getRandomColor();
+    }
+  }
+}
+
+function getRandomColor() {
+  return "#" + Math.floor(Math.random() * 16777215).toString(16);
+}
+
+function hexToRgb(hex) {
+  const bigint = parseInt(hex.substring(1), 16);
+  return {
+    r: (bigint >> 16) & 255,
+    g: (bigint >> 8) & 255,
+    b: bigint & 255,
+  };
+}
+
+function rgbToHex(r, g, b) {
+  return "#" + ((1 << 24) + (r << 16) + (g << 8) + b).toString(16).slice(1);
+}
+
+// Your other code here...
+
+init();

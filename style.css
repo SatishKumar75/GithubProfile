@@ -19,7 +19,8 @@ body {
     /* overflow: hidden; */
 }
 
-#canvas {
+#canvas,
+#canvas1 {
     position: fixed;
     left: 0;
     top: 0;
