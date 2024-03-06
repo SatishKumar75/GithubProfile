@@ -82,6 +82,7 @@ const getUser = async (username) => {
 
     main.innerHTML = card;
     getRepos(username);
+    main.classList.add("show-before");
   } catch (error) {
     main.innerHTML = `<h3 class="animate__animated animate__shakeX">${error}</h3>`;
   }
@@ -137,7 +138,7 @@ const getFollowersDetails = async (followersUrl) => {
     const followersData = await response.json();
 
     const followerDetailsPromises = followersData
-      .slice(0, 2)
+      .slice(0, 4)
       .map(async (follower) => {
         try {
           const followerDetailsResponse = await fetch(follower.url);
@@ -293,31 +294,55 @@ class Meteor {
   constructor() {
     this.reset();
   }
+
   reset() {
     this.x = Math.random() * w + 300;
     this.y = -100;
-    this.size = Math.random() * 3 + 0.5;
+    this.z = Math.random() * 1000;
+    this.size = Math.random() * 3 + 1;
     this.speed = (Math.random() + 0.5) * 8;
   }
+
   draw() {
     ctx.save();
+
+    const perspective = 1200;
+    const scale = perspective / (perspective + this.z);
+    const projectedX = this.x * scale;
+    const projectedY = this.y * scale;
+    const projectedSize = this.size * scale;
+
+    ctx.translate(projectedX, projectedY);
+    ctx.scale(scale, scale);
+
     ctx.strokeStyle = "rgba(255, 255, 255, .1)";
     ctx.lineCap = "round";
-    ctx.shadowColor = "rgba(255, 255, 255, 1)";
-    ctx.shadowBlur = 10;
     for (let i = 0; i < 10; i++) {
+      const opacity = 1 - i * 0.1;
       ctx.beginPath();
-      ctx.moveTo(this.x, this.y);
-      ctx.lineWidth = this.size;
-      ctx.lineTo(this.x + 10 * (i + 1), this.y - 10 * (i + 1));
+      ctx.moveTo(0, 0);
+      ctx.lineWidth = projectedSize * 0.3;
+      ctx.lineTo(10 * (i + 1), -10 * (i + 1));
+      ctx.strokeStyle = `rgba(255, 255, 255, ${opacity})`;
       ctx.stroke();
       ctx.closePath();
     }
+
+    ctx.beginPath();
+    ctx.arc(0, 0, projectedSize * 0.5, 0, Math.PI * 2);
+    ctx.fillStyle = "rgba(255, 255, 255, 0.5)";
+    ctx.fill();
+    ctx.closePath();
+
+    // Reset transformations
     ctx.restore();
   }
+
   update() {
     this.x -= this.speed;
     this.y += this.speed;
+
+    // Reset meteor if out of bounds
     if (this.y >= h + 100) {
       this.reset();
     }
